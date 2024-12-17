@@ -1,0 +1,46 @@
+name: Deploy Multiple Vite Projects to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Trigger deployment when pushing to 'main'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # Build Project A
+      - name: install hydravite
+        run: |
+          cd hydravite
+          npm install
+          npm run build
+
+      # # Build Project B
+      # - name:  install future
+      #   run: |
+      #     cd future
+      #     npm install
+      #     npm run build
+
+      # Deploy to GitHub Pages
+      - name: Deploy Projects to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.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
+ }}
+          publish_dir: ./
+          keep_files: true
+        env:
+          BUILD_PATHS: |
+            project-a/dist => hydravite
+  # project-b/dist => project-b
